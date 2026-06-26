@@ -252,6 +252,24 @@ textarea{resize:vertical;min-height:60px}
       </div>
 
       <div class="card">
+        <div class="section-label">Exhibición y competencia</div>
+        <div class="field">
+          <label>¿Cómo están exhibidos los productos?</label>
+          <div class="tipos-row">
+            <button type="button" class="tipo-btn" onclick="setExhibicion(this,'Buena')">👍 Buena</button>
+            <button type="button" class="tipo-btn" onclick="setExhibicion(this,'Regular')">👌 Regular</button>
+            <button type="button" class="tipo-btn" onclick="setExhibicion(this,'Mala')">👎 Mala</button>
+          </div>
+          <input type="hidden" id="f-exhibicion">
+          <textarea id="f-exhibicion-detalle" placeholder="Detalles sobre la exhibición (opcional)..." style="margin-top:8px;min-height:50px"></textarea>
+        </div>
+        <div class="field">
+          <label>Competencia en el local</label>
+          <textarea id="f-competencia" placeholder="Indicá qué marcas y con qué productos compiten en este local..." style="min-height:60px"></textarea>
+        </div>
+      </div>
+
+      <div class="card">
         <div class="section-label">Seguimiento</div>
         <div class="row2">
           <div class="field"><label>¿Se agendó otro contacto?</label>
@@ -665,6 +683,7 @@ async function guardarNuevoCliente(){
 
 // ─── FORMULARIO CONTACTO ─────────────────────────────────────
 function onClienteSeleccionado(){ /* futuro: pre-rellenar datos */ }
+function setExhibicion(el,v){ document.querySelectorAll('.tipo-btn[onclick*="setExhibicion"]').forEach(b=>b.classList.remove('sel')); el.classList.add('sel'); document.getElementById('f-exhibicion').value=v; }
 function setTipo(el,v){ document.querySelectorAll('.tipo-btn').forEach(b=>b.classList.remove('sel')); el.classList.add('sel'); document.getElementById('f-tipo').value=v; }
 function setMotivo(el,v){ document.querySelectorAll('.motivo-btn').forEach(b=>b.classList.remove('sel')); el.classList.add('sel'); document.getElementById('f-motivo').value=v; }
 function setClienteTipo(v){
@@ -707,6 +726,9 @@ async function guardar(){
     agenda: document.getElementById('f-agenda').value,
     fecha_agenda: document.getElementById('f-fecha-agenda').value||null,
     obs: document.getElementById('f-obs').value.trim()||null,
+    exhibicion: document.getElementById('f-exhibicion').value||null,
+    exhibicion_detalle: document.getElementById('f-exhibicion-detalle').value.trim()||null,
+    competencia: document.getElementById('f-competencia').value.trim()||null,
     id: Date.now()
   };
   if(!v.fecha||!v.cliente||!v.cliente_tipo||!v.tipo||!v.motivo||!v.resultado){
@@ -738,8 +760,9 @@ function volverAlPanel(){
 }
 
 function limpiarForm(){
-  ['f-empresa','f-que-compra','f-otros-detalle','f-obs','f-fecha-agenda','f-fecha-mail'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
-  ['f-tipo','f-motivo','f-resultado','f-agenda','f-motivo-otra','f-envio-mail','f-pedido-tipo','f-cliente-tipo','f-cliente-sel'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  ['f-empresa','f-que-compra','f-otros-detalle','f-obs','f-fecha-agenda','f-fecha-mail','f-exhibicion-detalle','f-competencia'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=''});
+  ['f-tipo','f-motivo','f-resultado','f-agenda','f-motivo-otra','f-envio-mail','f-pedido-tipo','f-cliente-tipo','f-cliente-sel','f-exhibicion'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  document.querySelectorAll('.tipo-btn[onclick*="setExhibicion"]').forEach(b=>b.classList.remove('sel'));
   document.querySelectorAll('.tipo-btn,.motivo-btn').forEach(b=>b.classList.remove('sel'));
   document.getElementById('btn-actual').className='cliente-btn';
   document.getElementById('btn-nuevo').className='cliente-btn';
